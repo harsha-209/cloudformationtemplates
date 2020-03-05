@@ -1,0 +1,70 @@
+Resources:
+  Ec2Instance1:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      SecurityGroupIds: 
+        - sg-06ec992117255b7cc
+      KeyName: latest
+      ImageId: ami-00eb20669e0990cb4
+      SubnetId: subnet-043d4b6880716276c
+      UserData:
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash -xe
+            sudo yum update -y
+            sudo yum install nginx -y
+            sudo service start nginx
+            mkdir ravi
+
+  Ec2Instance2:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      SecurityGroupIds: 
+        - sg-06ec992117255b7cc
+      KeyName: latest
+      ImageId: ami-00eb20669e0990cb4
+ #     AssociatePublicIpAddres: true
+      SubnetId: subnet-0e33addbb4b146c6d
+      UserData:
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash -xe
+            sudo yum update -y
+            sudo yum install nginx -y
+            sudo service nginx start
+            mkdir ravi
+
+  DefaultTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: tar-group
+      TargetType: instance
+      Targets:
+        - Id:  !Ref Ec2Instance1
+        - Id:  !Ref Ec2Instance2
+      VpcId: vpc-05e99f3bca6bdf597
+      Port: 80
+      Protocol: HTTP
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Subnets:
+         - subnet-0e33addbb4b146c6d
+         - subnet-043d4b6880716276c
+      SecurityGroups:
+         - sg-072d8d87016e861d7
+
+  Loadlistener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: "forward"
+          TargetGroupArn: !Ref DefaultTargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+
