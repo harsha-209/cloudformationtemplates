@@ -17,4 +17,5 @@ AWSTemplateFormatVersion: "2010-09-09"
             Ref: "myLaunchConfig"
           MinSize: "1"
           MaxSize: "4"
+          
  
