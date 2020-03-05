@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+  Resources:
+    myLaunchConfig: 
+      Type: AWS::AutoScaling::LaunchConfiguration
+        Properties: 
+          KeyName: latest
+          AssociatePublicIpAddress: "true"
+          ImageId: "ami-0afea9fa2869024f8"
+          SecurityGroups: sg-0ef51af1b3130b198
+          InstanceType: "t2.micro"
+
+    myASG: 
+      Type: AWS::AutoScaling::AutoScalingGroup
+        Properties: 
+          AvailabilityZones: us-east-1
+          LaunchConfigurationName: 
+            Ref: "myLaunchConfig"
+          MinSize: "1"
+          MaxSize: "4"
+ 
