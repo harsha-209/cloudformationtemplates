@@ -1,0 +1,37 @@
+Resources:
+  MyLambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Handler: "index.lambda_handler"
+      Role: arn:aws:iam::743694115654:role/bothec2andcloud
+      Code:
+        ZipFile: |
+          import boto3
+          region = 'us-east-1'  region_name=region
+          instances = ['i-0085075f9e96667dc']
+          ec2 = boto3.client('ec2')
+
+          def lambda_handler(event, context):
+              response = ec2.start_instances(InstanceIds=instances)
+              print('stopped your instances: ' + str(response))
+      Runtime: "python3.7"
+      Timeout: "11"
+
+  RestApi :
+    Type : AWS::ApiGateway::RestApi
+    Properties :
+      endpointConfigurationTypes: REGIONAL
+
+  ProxyResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref RestApi
+
+
+  ProxyResourceANY:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref RestApi
+      ResourceId: !Ref ProxyResource
+      HttpMethod: ANY
+      AuthorizationType: NONE
