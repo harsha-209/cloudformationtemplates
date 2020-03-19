@@ -75,7 +75,7 @@ Resources:
         - subnet-0e33addbb4b146c6d
         - subnet-043d4b6880716276c
     #    SecurityGroupIds: 
-    #      - sg-02337e68ba095af32
+    #      - sg-02337e68ba095af32f
 
 
 
