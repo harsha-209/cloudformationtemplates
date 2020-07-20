@@ -1,13 +1,31 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  AMI:
+    Type: String
+    Default: 'ami-02d55cb47e83a99a0'
+  Subneta:
+    Type: CommaDelimitedList
+    Default: 'subnet-168aff5a'
+  Subnetb:
+    Type: CommaDelimitedList
+    Default: 'subnet-b15ee1ca'
+  VPC:
+    Type: String
+    Default: 'vpc-a50b15cd'
+  
+  InstanceTypeParameter:
+    Type: String
+    Default: 't2.micro'
 Resources:
   Ec2Instance1:
     Type: 'AWS::EC2::Instance'
     Properties:
-      InstanceType: t2.micro
+      InstanceType: !Ref InstanceTypeParameter
       SecurityGroupIds: 
-        - sg-06ec992117255b7cc
-      KeyName: latest
-      ImageId: ami-00eb20669e0990cb4
-      SubnetId: subnet-043d4b6880716276c
+        - sg-0484a55f535e97f30
+      KeyName: ramcharan
+      ImageId: !Ref AMI
+      SubnetId: !Ref Subneta
       UserData:
         Fn::Base64: 
           !Sub |
@@ -20,13 +38,13 @@ Resources:
   Ec2Instance2:
     Type: 'AWS::EC2::Instance'
     Properties:
-      InstanceType: t2.micro
+      InstanceType: !Ref InstanceTypeParameter
       SecurityGroupIds: 
-        - sg-06ec992117255b7cc
-      KeyName: latest
-      ImageId: ami-00eb20669e0990cb4
+        - sg-0484a55f535e97f30
+      KeyName: ramcharan
+      ImageId: !Ref AMI
  #     AssociatePublicIpAddres: true
-      SubnetId: subnet-0e33addbb4b146c6d
+      SubnetId: !Ref Subnetb
       UserData:
         Fn::Base64: 
           !Sub |
