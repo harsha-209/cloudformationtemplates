@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  AMI:
+    Type: String
+    Default: 'ami-02d55cb47e83a99a0'
+  Subneta:
+    Type: String
+    Default: 'subnet-168aff5a'
+  Subnetb:
+    Type: String
+    Default: 'subnet-b76364df'
+  VPC:
+    Type: String
+    Default: 'vpc-a50b15cd'
+  
+  InstanceTypeParameter:
+    Type: String
+    Default: 't2.micro'
+Resources:
+  Ec2Instance1:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: !Ref InstanceTypeParameter
+      SecurityGroupIds: 
+        - sg-0484a55f535e97f30
+      KeyName: ramcharan
+      ImageId: !Ref AMI
+      SubnetId: !Ref Subneta
+
+
+  Ec2Instance2:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: !Ref InstanceTypeParameter
+      SecurityGroupIds: 
+        - sg-0484a55f535e97f30
+      KeyName: ramcharan
+      ImageId: !Ref AMI
+ #     AssociatePublicIpAddres: true
+      SubnetId: !Ref Subnetb
+
+
+  DefaultTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: tar-group
+      TargetType: instance
+      Targets:
+        - Id:  !Ref Ec2Instance1
+        - Id:  !Ref Ec2Instance2
+      VpcId: !Ref VPC
+      Port: 80
+      Protocol: HTTP
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Subnets:
+         -  !Ref Subneta
+         -  !Ref Subnetb
+      SecurityGroups:
+         - sg-0484a55f535e97f30
+
+  Loadlistener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: "forward"
+          TargetGroupArn: !Ref DefaultTargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+
+
