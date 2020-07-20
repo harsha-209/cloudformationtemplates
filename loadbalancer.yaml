@@ -70,8 +70,8 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Subnets:
-         - Id: !Ref Subneta
-         - Id: !Ref Subnetb
+         -  !Ref Subneta
+         -  !Ref Subnetb
       SecurityGroups:
          - sg-0484a55f535e97f30
 
