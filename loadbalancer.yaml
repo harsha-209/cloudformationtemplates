@@ -8,7 +8,7 @@ Parameters:
     Default: 'subnet-168aff5a'
   Subnetb:
     Type: String
-    Default: 'subnet-b15ee1ca'
+    Default: 'subnet-b76364df'
   VPC:
     Type: String
     Default: 'vpc-a50b15cd'
