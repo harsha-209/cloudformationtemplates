@@ -4,10 +4,10 @@ Parameters:
     Type: String
     Default: 'ami-02d55cb47e83a99a0'
   Subneta:
-    Type: CommaDelimitedList
+    Type: String
     Default: 'subnet-168aff5a'
   Subnetb:
-    Type: CommaDelimitedList
+    Type: String
     Default: 'subnet-b15ee1ca'
   VPC:
     Type: String
@@ -62,7 +62,7 @@ Resources:
       Targets:
         - Id:  !Ref Ec2Instance1
         - Id:  !Ref Ec2Instance2
-      VpcId: vpc-05e99f3bca6bdf597
+      VpcId: !Ref VPC
       Port: 80
       Protocol: HTTP
 
@@ -70,10 +70,10 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Subnets:
-         - subnet-0e33addbb4b146c6d
-         - subnet-043d4b6880716276c
+         - Id: !Ref Subneta
+         - Id: !Ref Subnetb
       SecurityGroups:
-         - sg-072d8d87016e861d7
+         - sg-0484a55f535e97f30
 
   Loadlistener:
     Type: AWS::ElasticLoadBalancingV2::Listener
